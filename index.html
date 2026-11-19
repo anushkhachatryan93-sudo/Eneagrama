@@ -1,0 +1,674 @@
+<!doctype html>
+<html lang="hy">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Էննեագրամի թեստ</title>
+<meta name="description" content="Ինտերակտիվ թեստ և ուղեցույց Էննեագրամի 9 տիպերի մասին՝ ծագում, թևեր, կենտրոններ և քո անձնային տիպի բացահայտում։">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Armenian:wght@400;500;600;700;800&family=Noto+Serif+Armenian:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fffaf3; --surface:#ffffff; --ink:#2b2a35; --muted:#6a6878; --line:#eadfce;
+  --brand:#e8794a; --brand2:#8b5cc9; --brand3:#14a39a;
+  --shadow:0 10px 30px rgba(80,50,20,.10); --radius:22px;
+  --c1:#4a7fd0; --c2:#ec6f93; --c3:#f59e0b; --c4:#9b5de5; --c5:#14a39a;
+  --c6:#7a8f3a; --c7:#e6a800; --c8:#e5533d; --c9:#4fae7b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#17151d; --surface:#221f2b; --ink:#f3eefb; --muted:#b4aec6; --line:#38334a;
+    --shadow:0 10px 30px rgba(0,0,0,.4); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#17151d; --surface:#221f2b; --ink:#f3eefb; --muted:#b4aec6; --line:#38334a;
+  --shadow:0 10px 30px rgba(0,0,0,.4); color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Noto Sans Armenian",system-ui,sans-serif;line-height:1.65;font-size:17px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Noto Serif Armenian",Georgia,serif;line-height:1.25;margin:0 0 .5em}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+section{padding:72px 0}
+.kicker{display:inline-block;font-weight:700;font-size:.8rem;letter-spacing:.08em;text-transform:uppercase;color:var(--brand);background:color-mix(in srgb,var(--brand) 12%,transparent);padding:6px 14px;border-radius:99px;margin-bottom:14px}
+h2{font-size:clamp(1.7rem,3.5vw,2.5rem)}
+.lead{font-size:1.12rem;color:var(--muted);max-width:760px}
+
+/* nav */
+nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:12px}
+.logo{font-family:"Noto Serif Armenian",serif;font-weight:800;text-decoration:none;display:flex;align-items:center;gap:8px}
+.menu{display:flex;gap:4px;flex-wrap:wrap}
+.menu a{text-decoration:none;font-weight:600;font-size:.92rem;padding:8px 12px;border-radius:99px;color:var(--muted)}
+.menu a:hover{background:color-mix(in srgb,var(--brand) 12%,transparent);color:var(--ink)}
+.menu a.cta{background:var(--brand);color:#fff}
+@media(max-width:760px){.menu a:not(.cta){display:none}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;padding:70px 0 90px}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.45;z-index:0}
+.b1{width:340px;height:340px;background:#ffb88c;top:-60px;left:-80px}
+.b2{width:380px;height:380px;background:#c9a8ff;right:-100px;top:30px}
+.b3{width:300px;height:300px;background:#8be0d0;bottom:-120px;left:40%}
+.hero .wrap{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.hero h1{font-size:clamp(2.2rem,5.5vw,3.8rem);font-weight:800}
+.hero h1 span{background:linear-gradient(90deg,var(--brand),var(--brand2),var(--brand3));-webkit-background-clip:text;background-clip:text;color:transparent}
+.btn{display:inline-flex;align-items:center;gap:8px;border:0;cursor:pointer;font:inherit;font-weight:700;padding:14px 26px;border-radius:99px;text-decoration:none;transition:transform .15s,box-shadow .15s}
+.btn:hover{transform:translateY(-2px)}
+.btn.primary{background:linear-gradient(90deg,var(--brand),#f2a03d);color:#fff;box-shadow:0 8px 20px rgba(232,121,74,.35)}
+.btn.ghost{background:var(--surface);border:1.5px solid var(--line);color:var(--ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.hero .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
+.hero-fig{display:flex;justify-content:center}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr}.hero-fig{order:-1}}
+
+/* enneagram figure */
+.fig{width:100%;max-width:430px;height:auto;overflow:visible}
+.fig .ring{fill:var(--surface);stroke:var(--line);stroke-width:3}
+.fig .ln{stroke:var(--muted);stroke-width:1.6;fill:none;opacity:.55}
+.fig .tri{stroke:var(--brand);opacity:.9;stroke-width:2}
+.node{cursor:pointer;outline:none}
+.node circle{transition:transform .2s;transform-box:fill-box;transform-origin:center}
+.node:hover circle,.node:focus-visible circle{transform:scale(1.18)}
+.node text{font-family:"Noto Serif Armenian",serif;font-weight:800;font-size:22px;fill:#fff;pointer-events:none}
+.node.dk text{fill:#3a2d00}
+.fig-hint{text-align:center;color:var(--muted);font-size:.9rem;margin-top:8px}
+
+/* cards */
+.grid{display:grid;gap:20px}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:900px){.g3{grid-template-columns:1fr}.g2{grid-template-columns:1fr}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:26px;box-shadow:var(--shadow)}
+.card h3{font-size:1.25rem}
+.card p{margin:.3em 0 0;color:var(--muted)}
+.ico{font-size:2.2rem;line-height:1;margin-bottom:12px}
+
+/* people */
+.people{display:grid;gap:18px;grid-template-columns:repeat(3,1fr);margin-top:28px}
+@media(max-width:900px){.people{grid-template-columns:1fr}}
+.person{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:24px;position:relative;overflow:hidden}
+.person::before{content:"";position:absolute;right:-30px;top:-30px;width:110px;height:110px;border-radius:50%;background:var(--pc);opacity:.18}
+.person .yr{font-weight:700;color:var(--pc);font-size:.9rem}
+.person h3{margin:.2em 0 .3em;font-size:1.2rem}
+.person p{margin:0;color:var(--muted);font-size:.97rem}
+
+/* centers */
+.center{border-top:6px solid var(--cc);padding-top:20px}
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pill{border:0;cursor:pointer;font:inherit;font-weight:700;font-size:.88rem;padding:6px 13px;border-radius:99px;color:#fff;background:var(--pc)}
+.pill.dk{color:#3a2d00}
+.pill:hover{filter:brightness(1.08)}
+
+/* wings & arrows */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+@media(max-width:860px){.split{grid-template-columns:1fr}}
+.tip{background:color-mix(in srgb,var(--brand3) 10%,var(--surface));border:1px solid color-mix(in srgb,var(--brand3) 35%,var(--line));border-radius:16px;padding:16px 18px;margin-top:16px}
+
+/* types grid */
+.tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:900px){.tgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tgrid{grid-template-columns:1fr}}
+.tcard{--c:var(--c1);text-align:left;cursor:pointer;font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px;box-shadow:var(--shadow);position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.tcard:hover{transform:translateY(-4px);box-shadow:0 16px 36px color-mix(in srgb,var(--c) 28%,transparent)}
+.tcard::after{content:"";position:absolute;inset:auto -20px -40px auto;width:120px;height:120px;border-radius:50%;background:var(--c);opacity:.14}
+.tcard .num{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--c);color:#fff;font-family:"Noto Serif Armenian",serif;font-weight:800;font-size:1.3rem}
+.tcard.dk .num{color:#3a2d00}
+.tcard h3{margin:12px 0 2px;font-size:1.2rem}
+.tcard .tag{color:var(--muted);font-size:.93rem;margin:0}
+.tcard .more{display:inline-block;margin-top:12px;font-weight:700;font-size:.9rem;color:var(--c)}
+
+/* test */
+.test{background:linear-gradient(180deg,color-mix(in srgb,var(--brand2) 8%,var(--bg)),var(--bg))}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:28px;box-shadow:var(--shadow);padding:34px;max-width:860px;margin:30px auto 0}
+@media(max-width:560px){.panel{padding:20px}}
+.progress{height:10px;background:var(--line);border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--brand),var(--brand2));border-radius:99px;transition:width .4s}
+.step-meta{display:flex;justify-content:space-between;color:var(--muted);font-weight:600;font-size:.92rem;margin:12px 0 18px}
+.opts{display:grid;gap:12px}
+.opt{display:flex;gap:14px;align-items:flex-start;padding:14px 16px;border:1.5px solid var(--line);border-radius:16px;cursor:pointer;transition:border-color .15s,background .15s,transform .1s;background:var(--surface)}
+.opt:hover{border-color:var(--brand);transform:translateX(2px)}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.box{flex:0 0 26px;height:26px;border-radius:8px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;color:transparent;font-weight:800;margin-top:1px;transition:.15s}
+.opt:has(input:checked){border-color:var(--brand);background:color-mix(in srgb,var(--brand) 10%,var(--surface))}
+.opt:has(input:checked) .box{background:var(--brand);border-color:var(--brand);color:#fff}
+.opt:has(input:focus-visible){outline:3px solid color-mix(in srgb,var(--brand2) 50%,transparent)}
+.nav-row{display:flex;justify-content:space-between;gap:12px;margin-top:26px;flex-wrap:wrap}
+.hint{color:var(--muted);font-size:.95rem;margin:0 0 16px}
+
+/* result */
+.result-hero{--c:var(--c1);text-align:center;padding:30px 20px;border-radius:24px;background:linear-gradient(160deg,color-mix(in srgb,var(--c) 20%,var(--surface)),var(--surface));border:1px solid color-mix(in srgb,var(--c) 40%,var(--line));position:relative;overflow:hidden}
+.result-hero .big{width:92px;height:92px;border-radius:50%;background:var(--c);color:#fff;font-family:"Noto Serif Armenian",serif;font-weight:800;font-size:3rem;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 12px 30px color-mix(in srgb,var(--c) 45%,transparent);animation:pop .6s cubic-bezier(.2,1.6,.4,1)}
+.result-hero.dk .big{color:#3a2d00}
+@keyframes pop{from{transform:scale(.2);opacity:0}to{transform:scale(1);opacity:1}}
+.result-hero h3{font-size:1.9rem;margin:16px 0 4px}
+.conf{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.conf i{position:absolute;top:-14px;width:10px;height:14px;border-radius:3px;opacity:.9;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(520px) rotate(540deg);opacity:0}}
+.bars{display:grid;gap:10px;margin:26px 0}
+.bar{display:grid;grid-template-columns:150px 1fr 48px;gap:12px;align-items:center;font-size:.95rem}
+@media(max-width:560px){.bar{grid-template-columns:110px 1fr 42px;font-size:.85rem}}
+.bar .tr{height:14px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar .tr i{display:block;height:100%;width:0;border-radius:99px;background:var(--c);transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.bar b{text-align:right}
+.note{background:color-mix(in srgb,var(--brand) 8%,var(--surface));border:1px dashed color-mix(in srgb,var(--brand) 45%,var(--line));border-radius:16px;padding:14px 18px;color:var(--muted);font-size:.95rem}
+
+/* modal */
+dialog{border:0;border-radius:28px;padding:0;max-width:760px;width:calc(100% - 28px);max-height:90vh;background:var(--surface);color:var(--ink);box-shadow:0 30px 80px rgba(0,0,0,.35)}
+dialog::backdrop{background:rgba(30,20,50,.55);backdrop-filter:blur(3px)}
+.m-head{--c:var(--c1);padding:28px 28px 22px;background:linear-gradient(135deg,color-mix(in srgb,var(--c) 28%,var(--surface)),var(--surface));display:flex;gap:18px;align-items:center;position:relative}
+.m-head .big{flex:0 0 72px;height:72px;border-radius:50%;background:var(--c);color:#fff;font-family:"Noto Serif Armenian",serif;font-weight:800;font-size:2.3rem;display:flex;align-items:center;justify-content:center}
+.m-head.dk .big{color:#3a2d00}
+.m-head h3{margin:0;font-size:1.6rem}
+.m-head p{margin:2px 0 0;color:var(--muted)}
+.m-close{position:absolute;right:14px;top:14px;border:0;background:var(--surface);width:38px;height:38px;border-radius:50%;font-size:1.2rem;cursor:pointer;color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.m-body{padding:6px 28px 28px;overflow:auto;max-height:calc(90vh - 130px)}
+.m-body h4{font-family:"Noto Serif Armenian",serif;margin:22px 0 8px;font-size:1.1rem}
+.m-body ul{margin:0;padding-left:1.2em}
+.m-body li{margin:.25em 0}
+.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:6px}
+@media(max-width:560px){.facts{grid-template-columns:1fr}}
+.fact{background:color-mix(in srgb,var(--c) 9%,var(--surface));border:1px solid color-mix(in srgb,var(--c) 25%,var(--line));border-radius:14px;padding:10px 14px}
+.fact small{display:block;color:var(--muted);font-weight:600;font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.fact span{font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:560px){.two{grid-template-columns:1fr}}
+.good{color:var(--c9)} .grow{color:var(--brand)}
+.wingc{border-left:5px solid var(--wc);background:color-mix(in srgb,var(--wc) 8%,var(--surface));border-radius:14px;padding:12px 16px}
+.wingc p{margin:.3em 0 0;font-size:.97rem}
+.wnote{color:var(--muted);font-size:.85rem;margin:8px 0 0}
+.secs{display:grid;gap:10px}
+details.sec{border:1px solid var(--line);border-radius:14px;background:var(--surface);overflow:hidden}
+details.sec summary{cursor:pointer;font-weight:700;padding:12px 16px;list-style:none;display:flex;justify-content:space-between;gap:10px;align-items:center}
+details.sec summary::-webkit-details-marker{display:none}
+details.sec summary::after{content:"＋";color:var(--c);font-weight:800}
+details.sec[open] summary::after{content:"－"}
+details.sec[open] summary{background:color-mix(in srgb,var(--c) 10%,var(--surface))}
+.sbody{padding:4px 16px 14px}
+.sbody p{margin:.6em 0}
+
+footer{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--muted);font-size:.93rem}
+footer .wrap{display:grid;gap:8px}
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}html{scroll-behavior:auto}.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#top"><svg width="28" height="28" viewBox="-14 -14 28 28" aria-hidden="true"><circle r="12" fill="none" stroke="#e8794a" stroke-width="2"/><polygon points="0,-12 10.4,6 -10.4,6" fill="none" stroke="#8b5cc9" stroke-width="1.6"/></svg> Էննեագրամ</a>
+    <div class="menu">
+      <a href="#about">Ի՞նչ է</a>
+      <a href="#origin">Ծագում</a>
+      <a href="#structure">Կառուցվածք</a>
+      <a href="#types">9 տիպերը</a>
+      <a href="#more">Ավելին</a>
+      <a class="cta" href="#test">Անցնել թեստը</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+  <div class="wrap">
+    <div>
+      <span class="kicker">Ճանաչիր ինքդ քեզ</span>
+      <h1>Ի՞նչ տիպի <span>մարդ ես դու</span>։</h1>
+      <p class="lead">Էննեագրամը ինը անձնային տիպերի մոդել է. այն օգնում է հասկանալ, թե ինչն է մեզ շարժում, ինչից ենք վախենում և ինչպես կարող ենք աճել։ Ծանոթացիր մոդելին, անցիր թեստը և բացահայտիր քո տիպը։</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#test">✨ Սկսել թեստը</a>
+        <a class="btn ghost" href="#about">Իմանալ ավելին</a>
+      </div>
+    </div>
+    <div class="hero-fig">
+      <div>
+        <svg id="heroFig" class="fig" viewBox="-60 10 520 380" role="img" aria-label="Էննեագրամի պատկեր՝ ինը կետ շրջանագծի վրա"></svg>
+        <p class="fig-hint">Սեղմիր թվի վրա՝ տիպին ծանոթանալու համար</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <span class="kicker">Ի՞նչ է Էննեագրամը</span>
+    <h2>Ինը դեմք, մեկ ընդհանուր շրջան</h2>
+    <p class="lead">Էննեագրամը երկչափ պատկեր է, որը նկարագրում է ինը հիմնարար անհատական տիպեր և նրանց միջև առկա փոխադարձ կապերը։ Որպես ժամանակակից հոգեբանական մոդել այն ձևավորվել է 20-րդ դարում, սակայն նրա արմատները գալիս են շատ ավելի հին ժամանակներից։</p>
+    <div class="grid g3" style="margin-top:30px">
+      <div class="card reveal"><div class="ico">🔤</div><h3>Անվան իմաստը</h3><p>«Էննեագրամ» բառը ծագել է հունարենից՝ «էննեա» (ինը) և «գրամմա» (պատկեր)։ Պատկերը շրջանագիծ է՝ ինը գագաթներով, և դրանցից յուրաքանչյուրը նշանակում է անհատականության մեկ տիպ։</p></div>
+      <div class="card reveal"><div class="ico">🧭</div><h3>Ինչի՞ համար է</h3><p>Մոդելը ցույց է տալիս ոչ թե «ինչպիսին ենք մենք արտաքուստ», այլ թե «ինչն է մեզ ներսից շարժում». մեր հիմնական մոտիվացիան, վախերն ու արձագանքման սովորույթները։</p></div>
+      <div class="card reveal"><div class="ico">🌱</div><h3>Ո՞րն է նպատակը</h3><p>Տիպը պիտակ չէ։ Այն օգնում է լավ հասկանալ ինքդ քեզ ու ուրիշներին, տեսնել սեփական ուժեղ կողմերը և ընտրել աճի ճանապարհը։</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="origin" style="background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--brand) 6%,var(--bg)))">
+  <div class="wrap">
+    <span class="kicker">Ծագում և պատմություն</span>
+    <h2>Հին իմաստությունից՝ ժամանակակից հոգեբանություն</h2>
+    <p class="lead">Էննեագրամի սկզբունքները կարելի է հանդիպել բաբելոնացիների և հին հույն մաթեմատիկոսների մոտ, ինչպես նաև վաղ քրիստոնեական և պարսկական ավանդույթներում։ Ժամանակակից աշխարհին այն ներկայացրել են երեք հայտնի անուններ։</p>
+    <div class="people">
+      <article class="person reveal" style="--pc:var(--c3)">
+        <span class="yr">1866–1949</span>
+        <h3>Գեորգի Իվանովիչ Գյուրջիև</h3>
+        <p>Հայազգի մտավորական, փիլիսոփա, միստիկ և հոգևոր ուսուցիչ։ Արևմտյան աշխարհը Էննեագրամին առաջին անգամ ծանոթացավ հենց նրա շնորհիվ։ 1920 թ. Ֆրանսիայում հիմնադրել է Մարդու ներդաշնակ զարգացման ինստիտուտը, իսկ «Չորրորդ ուղի» ուսմունքի հեղինակն է։</p>
+      </article>
+      <article class="person reveal" style="--pc:var(--c4)">
+        <span class="yr">Ծնվ. 1931 թ.</span>
+        <h3>Օսկար Իչազո</h3>
+        <p>Բոլիվիացի փիլիսոփա և միստիկ։ 1960-ական թվականներին Լատինական Ամերիկայում և ԱՄՆ-ում հիմնել է «Արիկա» դպրոցը։ Առաջինն է կիրառել Էննեագրամն անձի հոգեբանական կառուցվածքը նկարագրելու համար։</p>
+      </article>
+      <article class="person reveal" style="--pc:var(--c5)">
+        <span class="yr">Ծնվ. 1932 թ.</span>
+        <h3>Կլաուդիո Նարանխո</h3>
+        <p>Ամերիկացի հոգեբույժ, բժիշկ և հայտնի գեշտալտ-թերապևտ։ Առաջինն է ներկայացրել Էննեագրամի մոդելը գիտական հոգեթերապևտիկ հայեցակետից. նկարագրել է խառնվածքի տիպերը և սկիզբ դրել Էննեագրամի տարածմանը աշխարհում։</p>
+      </article>
+    </div>
+    <p class="note" style="margin-top:24px">Այսօր Էննեագրամը լայնորեն կիրառվում է հոգեթերապիայում, դասավանդման մեջ, քոուչինգում, թիմային աշխատանքում և անձնային զարգացման դասընթացներում։</p>
+  </div>
+</section>
+
+<section id="structure">
+  <div class="wrap">
+    <span class="kicker">Կառուցվածք</span>
+    <h2>Երեք կենտրոն, թևեր և սլաքներ</h2>
+
+    <h3 style="margin-top:20px">Երեք կենտրոնները</h3>
+    <p class="lead">Էննեագրամի հիմքում ընկած է երեք կենտրոնների մոդելը. մենք կողմնորոշվում ենք աշխարհում երեք տեսակի ինտելեկտի միջոցով՝ գլխի (մտավոր), սրտի (էմոցիոնալ) և մարմնի (բնազդային)։ Յուրաքանչյուր տիպ պատկանում է իր առաջատար կենտրոնին։</p>
+    <div class="grid g3" style="margin-top:24px" id="centers"></div>
+
+    <div class="split" style="margin-top:56px">
+      <div>
+        <h3>Թևեր</h3>
+        <p>Էննեագրամի ինը տիպերը կապված են շրջանագծով։ Այդ կապի շնորհիվ յուրաքանչյուր տիպ առավել կամ պակաս չափով գտնվում է հարևան տիպի ազդեցության ներքո։ Դա կոչվում է <b>թև</b>։</p>
+        <p>Օրինակ՝ 1-ին տիպը կարող է ունենալ որոշ գծեր, որոնք բնորոշ են 9-րդ տիպին, և այդ դեպքում նա ավելի հանգիստ ու զուսպ է, ավելի քիչ է ձգտում կատարելության կյանքի բոլոր բնագավառներում։ Իսկ եթե ավելի ուժեղ է 2-րդ տիպի ազդեցությունը, նա սկսում է ավելի շատ ուշադրություն դարձնել մյուս մարդկանց պահանջմունքներին։</p>
+        <div class="tip">💡 <b>Սլաքներ.</b> Սթրեսի տակ մենք հակված ենք շարժվել դեպի մի տիպի ոչ առողջ գծերը, իսկ ապահով ու հանգիստ վիճակում՝ դեպի մեկ այլ տիպի ուժեղ կողմերը։ Այսպես, եթե 9-րդ տիպի մարդը իրեն զգում է ինքնավստահ ու ապահով, նա շարժվում է դեպի 3-րդ տիպը՝ դառնում է առավել արդյունավետ ու նպատակասլաց։ Երկար ճնշման տակ նա սկսում է շարժվել դեպի 6-րդ տիպը՝ դառնում թերահավատ և սկսում կասկածանքով նայել թե՛ իրեն, թե՛ շրջապատին։</div>
+      </div>
+      <div style="display:flex;justify-content:center">
+        <svg id="arrowFig" class="fig" viewBox="0 0 400 400" role="img" aria-label="Էննեագրամի գծերը և շարժման ուղղությունները"></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="types" style="background:linear-gradient(180deg,var(--bg),color-mix(in srgb,var(--brand3) 6%,var(--bg)))">
+  <div class="wrap">
+    <span class="kicker">9 տիպերը</span>
+    <h2>Ծանոթացիր յուրաքանչյուր տիպին</h2>
+    <p class="lead">Սեղմիր քարտին՝ տեսնելու բնութագիրը, հիմնական մոտիվացիան, ուժեղ կողմերը և աճի ուղղությունը։</p>
+    <div class="tgrid" id="tgrid" style="margin-top:30px"></div>
+  </div>
+</section>
+
+<section id="more" style="display:none">
+  <div class="wrap">
+    <span class="kicker">Խորացնելու համար</span>
+    <h2>Ավելին Էննեագրամի մասին</h2>
+    <p class="lead">Սոցիալական ռոլերը, խմբերը, վերահսկող օրինաչափությունները և զարգացման վարժությունները՝ դասընթացի աշխատանքային տետրից։</p>
+    <div class="secs" id="moreSecs" style="margin-top:26px;--c:var(--brand)"></div>
+  </div>
+</section>
+
+<section id="test" class="test">
+  <div class="wrap">
+    <div style="text-align:center">
+      <span class="kicker">Թեստ</span>
+      <h2>Գտիր քո տիպը</h2>
+      <p class="lead" style="margin:0 auto">Ստորև կներկայացվեն 9 խմբեր՝ պնդումների ցուցակներով։ Յուրաքանչյուր խմբում նշիր այն պնդումները, որոնք <b>իրոք համընկնում են քեզ հետ</b>. կարող ես նշել մի քանիսը կամ բոլորը, կամ ոչ մեկը։ Խմբերի տիպերը թաքցված են, որպեսզի պատասխանները լինեն անկեղծ։</p>
+    </div>
+    <div class="panel" id="panel">
+      <div id="intro">
+        <div style="text-align:center">
+          <div style="font-size:3.2rem">📝</div>
+          <p class="hint" style="max-width:520px;margin:6px auto 22px">Թեստը տևում է մոտ 5–8 րոպե։ Պատասխանիր ինտուիտիվ՝ ոչ թե ինչպես «պետք է» լինես, այլ ինչպես իրականում ես զգում կամ վարվում։ Պատասխանները չեն պահվում և ոչ ոքի չեն ուղարկվում։</p>
+          <button class="btn primary" id="startBtn">Սկսել →</button>
+        </div>
+      </div>
+      <div id="quiz" hidden>
+        <div class="progress"><i id="pbar"></i></div>
+        <div class="step-meta"><span id="stepLabel"></span><span id="selCount"></span></div>
+        <p class="hint">Նշիր այն պնդումները, որոնք համընկնում են քեզ հետ։</p>
+        <div class="opts" id="opts"></div>
+        <div class="nav-row">
+          <button class="btn ghost" id="prevBtn">← Հետ</button>
+          <button class="btn primary" id="nextBtn">Հաջորդ →</button>
+        </div>
+      </div>
+      <div id="result" hidden></div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div><b>Աղբյուր.</b> «Պրակտիկ Էննեագրամա ICTA» դասընթացի առաջին մոդուլի աշխատանքային տետր (Alvarium Training &amp; Consulting, 2019)։ Պնդումները և տիպերի նկարագրությունները հիմնված են այդ նյութի վրա։</div>
+    <div>Այս թեստը ինքնաճանաչողության գործիք է, ոչ թե հոգեբանական ախտորոշում կամ մասնագիտական եզրակացություն։ Ճշգրիտ տիպը գտնելու լավագույն ուղին նկարագրությունները ուշադիր կարդալն ու ինքդ քեզ դիտարկելն է։</div>
+  </div>
+</footer>
+
+<dialog id="dlg" aria-labelledby="dTitle">
+  <div id="dContent"></div>
+</dialog>
+
+<script src="data/type-1.js"></script>
+<script src="data/type-2.js"></script>
+<script src="data/type-3.js"></script>
+<script src="data/type-4.js"></script>
+<script src="data/type-5.js"></script>
+<script src="data/type-6.js"></script>
+<script src="data/type-7.js"></script>
+<script src="data/type-8.js"></script>
+<script src="data/type-9.js"></script>
+<script src="data/extra.js"></script>
+<script>
+/* ---------- DATA ---------- */
+const TYPES = [
+{n:1,name:"Պերֆեկցիոնիստ",alt:"Բարեփոխիչ",tag:"Ճիշտ, պատասխանատու, սկզբունքային",color:"var(--c1)",dk:false,center:"body",
+ about:"Առաջինները ձգտում են ամեն ինչում կատարելության և անսխալության։ Նրանք պատասխանատու են, ճշտապահ, ուշադիր մանրուքների նկատմամբ և ունեն ներքին խիստ ձայն, որը շարունակ հիշեցնում է, թե ինչպես «պետք է» լինի ամեն ինչ։ Նրանք հավատում են ճշմարտությանը, սիրում են կարգ ու կանոն ու ցանկանում են աշխարհն ավելի լավը դարձնել։",
+ attitude:"Առաջինները շատ բարձր գնահատում են պարտականությունն ու ազնվությունը։ Նրանց համար կարևոր է լինել «ճիշտ» և անսխալ, իսկ պարտքը հաճախ կանգնում է հաճույքից առաջ։",
+ strengths:["Պատասխանատվություն ու ճշտապահություն","Բարձր չափորոշիչներ և ուշադրություն մանրուքներին","Ազնվություն ու սկզբունքայնություն","Ձգտում՝ ամեն ինչ ավելի լավը դարձնելու"],
+ challenges:["Խիստ ինքնաքննադատություն","Դժվարությամբ են ընդունում, որ ուրիշն էլ կարող է լավ անել","Զայրույթը ճնշելու սովորություն"],
+ advice:"Թույլ տվեք ինքներդ ձեզ սխալվել, հանգստանալ և վայելել ընթացքը։ «Բավական լավը» նույնպես լավ է։",
+ motivation:"Զայրույթ",fixation:"Քննադատություն",need:"Հարգանք (սահմաններ)",strategy:"Սեփական անձի վերահսկողություն և կատարելության ձգտում",
+ growth:7,stress:4,
+ beliefs:["Ես պետք է խիստ ու պահանջկոտ լինեմ ինքս իմ հանդեպ։","Պարտականությունները կարևոր են հաճույքներից։","Ես այնքան պահանջկոտ եմ ինքս իմ հանդեպ, որ իրավունք ունեմ քննադատել ուրիշներին։","Զգացմունքներն ու ցանկությունները անհրաժեշտ է վերահսկել։","Ես սխալվելու և անպատասխանատու լինելու իրավունք չունեմ։","Իրականությունը հեռու է կատարելությունից։","Կյանքում կարևոր է ունենալ վեհ իդեալներ և ձգտել համապատասխանել դրանց։"]},
+{n:2,name:"Օգնական",alt:"Ընկեր",tag:"Ջերմ, հոգատար, առատաձեռն",color:"var(--c2)",dk:false,center:"heart",
+ about:"Երկրորդները ջերմ, ուշադիր և զգայուն մարդիկ են։ Նրանք առաջինն են նկատում, թե ումն ինչի կարիք ունի, հիշում են ընկերների ու ընտանիքի կարևոր մանրուքները և անկեղծորեն սիրում են օգնել։ Նրանց համար հարաբերություններն ամենակարևոր բանն են կյանքում։",
+ attitude:"Կյանքում ամենահետաքրքիրը մարդիկ են։ Երկրորդները հիանալի լսում են և զգում շրջապատողների ապրումները, նրանց համար կարևոր է, որ իրենց կարիք ունենան։",
+ strengths:["Ջերմություն և կարեկցանք","Ուրիշների կարիքները զգալու շնորհք","Առատաձեռնություն ու հոգատարություն","Մարդկանց միավորելու և աջակցելու կարողություն"],
+ challenges:["Դժվար է խնդրել օգնություն կամ խոսել սեփական կարիքների մասին","«Անփոխարինելի» լինելու ձգտում","Սեփական սահմանները կորցնելու վտանգ"],
+ advice:"Հոգ տարեք նաև ինքներդ ձեր մասին։ Ձեր կարիքներն էլ են կարևոր, և սիրված լինելու համար պարտադիր չէ ինչ-որ բան «անել»։",
+ motivation:"Հպարտություն",fixation:"Երախտագիտության փնտրտուք",need:"Ընդունված լինել (սեր)",strategy:"Կենտրոնանալ ուրիշների պահանջմունքների վրա՝ դառնալով նրանց համար անփոխարինելի",
+ growth:4,stress:8,
+ beliefs:["Շրջապատողների սերն ու ուշադրությունը պետք է վաստակել։","Ես ինչ-որ բանի կարիք ունենալու և օգնություն խնդրելու իրավունք չունեմ։","Ինքդ քո մասին հոգ տանելը եսասիրություն է։","Շրջապատողները գնահատում են ինձ միայն այն դեպքում, երբ ես օգնում եմ կամ անհրաժեշտ բան եմ անում նրանց համար։","Ես շրջապատողների համար կարող եմ ավելին անել, քան ուրիշները։","Եթե չափից ավելի օգնության կարիք ունենամ, ապա շրջապատողները երես կթեքեն ինձնից։","Ես այնքան շատ բան եմ անում ուրիշների համար, որ արժանի եմ հատուկ վերաբերմունքի ու արտոնությունների։","Ես կարևոր դեր եմ խաղում ուրիշների կյանքում։"]},
+{n:3,name:"Նվաճող",alt:"Հաջողակ",tag:"Նպատակասլաց, արդյունավետ, ոգևորող",color:"var(--c3)",dk:true,center:"heart",
+ about:"Երրորդները էներգետիկ, արդյունավետ և նպատակասլաց են։ Նրանք հավատում են, որ ջանքերով ամեն ինչի կարելի է հասնել, և հիանալի գիտեն, թե ինչպես պետք է մոտիվացնել ինչպես իրենց, այնպես էլ ուրիշներին։ Նրանց համար շատ կարևոր է հաջողությունն ու արդյունքը։",
+ attitude:"Կյանքը շարժում է։ Երրորդները սիրում են գործը, արագ են կողմնորոշվում ու հեշտությամբ հարմարվում են տարբեր իրավիճակների, հաճախ հիանալի ներկայանալով հասարակության առջև։",
+ strengths:["Արդյունավետություն ու կազմակերպվածություն","Ոգևորելու և մոտիվացնելու շնորհք","Հարմարվողականություն","Նպատակին հասնելու վճռականություն"],
+ challenges:["Սեփական արժեքը ձեռքբերումներից կախելը","Զգացմունքների համար ժամանակ չունենալը","Հոգնածությունը չնկատելը հանուն արդյունքի"],
+ advice:"Հիշեք՝ դուք արժեքավոր եք ոչ միայն ձեռքբերումներով։ Թույլ տվեք ինքներդ ձեզ կանգ առնել և լսել սրտի ձայնը։",
+ motivation:"(Ինքնա)խաբեություն",fixation:"Փառասիրություն",need:"Ընդունված լինել (սեր)",strategy:"Ձգտել հաջողության և հիացմունք առաջացնել ուրիշների մոտ",
+ growth:6,stress:9,
+ beliefs:["Իմ արժեքը կախված է իմ ձեռքբերումներից։","Եթե մարդիկ տեսնեն իմ իրական եսը, ապա նրանք երես կթեքեն ինձնից։","Ողջ աշխարհը թատրոն է, որտեղ բոլորը ձևացնում են։","Էմոցիաների ու ապրումների ժամանակ չունեմ, դա ժամանակի ու էներգիայի կորուստ է։","Ես կարող եմ ամեն ինչ սովորել և ցանկացած գործում հաջողության հասնել։","Ես պետք է արդարացնեմ շրջապատողների ակնկալիքները։","Ես իրավունք չունեմ արտահայտելու իրական զգացմունքներս։","Ես տապալվելու կամ անհաջողության մատնվելու իրավունք չունեմ։"]},
+{n:4,name:"Ինդիվիդուալիստ",alt:"Ռոմանտիկ",tag:"Խորը, ստեղծագործ, իսկական",color:"var(--c4)",dk:false,center:"heart",
+ about:"Չորրորդները խորը, զգայուն և ստեղծագործ մարդիկ են։ Նրանց համար շատ կարևոր է լինել յուրահատուկ, իսկական և արտահայտել իրենց ներքին աշխարհը։ Նրանք հիանալի զգում են գեղեցիկը, ունեն նուրբ ճաշակ և ունակ են խորը կարեկցանքի։",
+ attitude:"Չորրորդները Էննեագրամի ամենաէմոցիոնալ տեսակն են։ Նրանց համար կարևոր է լինել «ոչ այնպիսին, ինչպիսին բոլորը», իսկ կյանքն ապրել զգացմունքների ու իմաստի խորքից։",
+ strengths:["Ստեղծագործականություն ու գեղագիտական ճաշակ","Հուզական խորություն և կարեկցանք","Իսկություն ու անկեղծություն","Անհատականություն և ինքնատիպություն"],
+ challenges:["«Ինձ ինչ-որ կարևոր բան է պակասում» զգացում","Համեմատում ուրիշների հետ","Տրամադրությունների տատանումներ և թախիծ"],
+ advice:"Նայեք նաև այն ամենին, ինչ արդեն ունեք։ Իսկական լինելու և սիրված լինելու համար պարտադիր չէ ինչ-որ իդեալի համապատասխանել։",
+ motivation:"Նախանձ",fixation:"Թախիծ",need:"Ընդունված լինել (սեր)",strategy:"Համեմատվել ուրիշների հետ ու ձգտել բացառիկության",
+ growth:1,stress:2,
+ beliefs:["Ուրիշների կյանքն ավելի թեթև է ու երջանիկ։","Տառապանքներն ինձ խորը ու յուրահատուկ մարդ են դարձնում։","Ինձ ինչ-որ կարևոր բան է պակասում։","Ես նման չեմ ուրիշներին։","Ուրիշների համար դժվար է ինձ հասկանալը։","Զգացմունքներն ինձ թույլ են տալիս ողջ լինել։","Որքան շատ աջակցության կարիք զգամ, այնքան ավելի սիրված լինելու իրավունք կունենամ։"]},
+{n:5,name:"Դիտորդ",alt:"Մտածող",tag:"Հետաքրքրասեր, վերլուծական, անկախ",color:"var(--c5)",dk:false,center:"head",
+ about:"Հինգերորդները իմաստուն, դիտողունակ և հետաքրքրասեր են։ Նրանք սիրում են խորանալ թեմաների մեջ, կուտակել տեղեկատվություն և վերլուծել աշխարհը։ Շատ են գնահատում անձնական տարածքը, հանգստությունն ու անկախությունը։",
+ attitude:"Աշխարհը լավ է նախ դիտել, ուսումնասիրել և հասկանալ, իսկ հետո միայն ներգրավվել։ Ժամանակն ու ուժերը Հինգերորդները խնայում են, որպեսզի դրանք բավականացնեն ամենակարևորին։",
+ strengths:["Վերլուծական միտք ու խոր գիտելիք","Հանգստություն և անկողմնակալություն","Ինքնուրույնություն","Համակարգված մտածողություն"],
+ challenges:["Մեկուսանալու հակում","Էմոցիաները «հետո» ապրելու սովորույթ","Ժամանակը, ուժերն ու ռեսուրսները չափից ավելի խնայելը"],
+ advice:"Փորձեք աստիճանաբար ավելի շատ կիսվել մարդկանց հետ։ Կապերը ոչ միայն սպառում են, այլև կարող են լիցքավորել։",
+ motivation:"Ժլատություն",fixation:"Մեկուսացում",need:"Անվտանգություն",strategy:"Մեկուսանալ և աշխարհի մասին գիտելիքներ կուտակել",
+ growth:8,stress:7,
+ beliefs:["Շրջապատող աշխարհն անվտանգ չէ, ուստի կարևոր է նախապես պատրաստ լինել ապագային։","Ավելի լավ է կողքից զգուշորեն և ուշադիր ուսումնասիրել կյանքը, քան ներգրավվել նրա մեջ։","Ես գործնականում ուրիշների կարիքը չունեմ։","Էմոցիաները խանգարում են իրավիճակն անկողմնակալ ընկալելուն։","Ես կարող եմ հաճույք ստանալ չնչին բանից։","Եթե չափից ավելի տարվեմ հարաբերություններով, ապա դրանք ուժասպառ կանեն ինձ։","Որքան շատ բան ցանկանամ մարդկանցից, այնքան ավելի շատ բան նրանք կսկսեն պահանջել ինձնից։"]},
+{n:6,name:"Կասկածամիտ",alt:"Լոյալիստ",tag:"Հավատարիմ, զգոն, հուսալի",color:"var(--c6)",dk:false,center:"head",
+ about:"Վեցերորդները ուշադիր, զգոն և խիստ հավատարիմ են։ Նրանք տեսնում են հնարավոր ռիսկերը, ստուգում են տեղեկատվությունը և հարցեր են տալիս, որպեսզի ապահովված լինեն։ Երբ ինչ-որ մեկին վստահում են, դառնում են անսասան հենարան։",
+ attitude:"Վեցերորդների ամենաուժեղ կողմը ամեն իրավիճակին տարբեր կողմերից նայելու ունակությունն է։ Կյանքն անկանխատեսելի է, ուստի ավելի լավ է պատրաստ լինել ամեն ինչի և ունենալ հուսալի դաշնակիցներ։",
+ strengths:["Հավատարմություն և հուսալիություն","Ռիսկերը ու խնդիրները կանխատեսելու ունակություն","Թիմային ոգի","Քննադատական մտածողություն"],
+ challenges:["Կասկած և ինքնավստահության պակաս","Անհանգստություն «իսկ եթե...» սցենարների շուրջ","Երկակի վերաբերմունք հեղինակությունների նկատմամբ"],
+ advice:"Վստահեք ձեր ներքին ձայնին։ Հիշեք՝ բոլոր հարցերում 100 % վստահություն չի լինում, և դա միանգամայն նորմալ է։",
+ motivation:"Վախ",fixation:"Կասկած",need:"Անվտանգություն",strategy:"Կասկածել և ստուգել՝ աջակցություն և հենարան որոնելիս",
+ growth:9,stress:3,
+ beliefs:["Կյանքն անկանխատեսելի է, և շրջապատող աշխարհն անվտանգ չէ։","Անվտանգ զգալու համար ես պետք է հուսալի դաշնակիցներ գտնեմ։","Չի կարելի վստահել մարդկանց առանց նրանց ստուգելու։","Իշխանություն ունեցող մարդկանց հետ ավելի լավ է զգույշ լինել, այլապես նրանք կարող են չարաշահել իրենց ազդեցությունը։","Երբեք ոչ մի հարցում չի կարելի 100 % համոզված լինել։ Ամեն ինչին կարելի է նայել նվազագույնը երկու կողմից։","Ավելի լավ է պատրաստ լինել վատթարագույնին, քան աշխարհին նայել վարդագույն ակնոցով։","«Ուշադրություն գրավելը» անվտանգ չէ։"]},
+{n:7,name:"Հաճույքամոլ",alt:"Լավատես",tag:"Ուրախ, էներգետիկ, լի հնարավորություններով",color:"var(--c7)",dk:true,center:"head",
+ about:"Յոթերորդները ուրախ, էներգիայով լի և հետաքրքրասեր մարդիկ են։ Նրանց միշտ գրավում է նորը, անսովորն ու հետաքրքիրը. նրանք ունեն հարյուրավոր ծրագրեր ու գաղափարներ, սիրում են ընկերներ, ազատություն և լավատեսորեն նայում են կյանքին։",
+ attitude:"Կյանքը տրված է հաճույքներ ստանալու համար։ Յոթերորդները տեսնում են հնարավորություններ այնտեղ, որտեղ ուրիշները տեսնում են խոչընդոտներ, և սիրում են իրենց ուրախությունը կիսել շրջապատի հետ։",
+ strengths:["Լավատեսություն ու էներգիա","Ստեղծագործ, ազատ մտածողություն","Արագ սովորելու ունակություն","Մարդկանց ոգևորելու շնորհք"],
+ challenges:["Դժվարություններից ու ցավից խուսափելու հակում","Մի գաղափարից մյուսը թռչելը","Գործերն ավարտին չհասցնելը"],
+ advice:"Փորձեք ժամանակ առ ժամանակ կանգ առնել և ապրել «հիմա»-ն։ Խորությունն էլ իր մեջ հաճույք է պարունակում։",
+ motivation:"Ագահություն",fixation:"Պլանավորում",need:"Անվտանգություն",strategy:"Ձգտել հաճույքների և կենտրոնանալ դրականի վրա",
+ growth:5,stress:1,
+ beliefs:["Կյանքը տրված է հաճույքներ ստանալու համար։","Եթե ինչ-որ բանի կամ ինչ-որ մեկին խիստ կապվեմ, ապա ինձ կարող են ցավ պատճառել։","Մտերիմ հարաբերությունները վտանգավոր են, դրանք չափից ավելի շատ բան են պահանջում ինձնից ու սպառնում են իմ ազատությանը։","Նոր ծրագրերը, մարդիկ ու գաղափարներն ավելի հրապուրիչ են, քան ծանոթները ու սովորական դարձած մարդիկ ու իրադարձությունները։","Միանգամայն բնական է կյանքից ստանալ այն, ինչ ուզում ես։","Առավել խելամիտ է կենտրոնանալ հնարավորությունների ու դրականի վրա, քան քայլ առ քայլ հաղթահարել դժվարություններն ու անհաջողությունները։","Ցանկացած իրավիճակում կարելի է ռեսուրս գտնել։","Լավագույնը, որ կարող ենք անել դժբախտ ու խեղճ մարդկանց համար՝ չլինել նրանցից մեկը։"]},
+{n:8,name:"Բոսս",alt:"Մարտահրավեր նետող",tag:"Ուժեղ, վճռական, պաշտպան",color:"var(--c8)",dk:false,center:"body",
+ about:"Ութերորդները ուժեղ, վճռական և ուղղամիտ են։ Նրանք հստակ գիտեն, թե ինչ են ուզում կյանքից, և իրենց ճանապարհին հաղթահարում են ցանկացած խոչընդոտ։ Նրանք բնական առաջնորդներ են, ովքեր պաշտպանում են իրենց մարդկանց։",
+ attitude:"Կյանքը պայքար է, որտեղ կարևոր է ուժեղ լինելը։ Ութերորդները պատասխանատվություն են վերցնում ոչ միայն իրենց, այլև իրենց մերձավորների համար, ու կարող են իրենց էներգիայով առաջ տանել ամբողջ խմբեր։",
+ strengths:["Ուժ, վճռականություն և քաջություն","Բնական առաջնորդություն","Արդարության ու մերձավորներին պաշտպանելու ձգտում","Ուղղամտություն ու անկեղծություն"],
+ challenges:["Ամեն ինչ վերահսկելու ու ճնշելու հակում","Թույլ կողմերը ցույց տալու դժվարություն","Դյուրագրգռություն ու կտրուկ արձագանքներ"],
+ advice:"Ուժը ներառում է նաև նրբություն։ Թույլ տվեք ինքներդ ձեզ վստահել ուրիշներին և ցույց տալ ձեր սեփական զգայուն կողմը։",
+ motivation:"Ցանկասիրություն",fixation:"Մեղադրանք",need:"Հարգանք (սահմաններ)",strategy:"Զարգացնել ուժը և պայքարել վերահսկողություն հաստատելու համար",
+ growth:2,stress:5,
+ beliefs:["Կյանքը պայքար է։ Լավագույն պաշտպանությունը հարձակումն է։","Ես պետք է ուժեղ լինեմ, որպեսզի ոչ ոք չկարողանա ցավ պատճառել ինձ ու իմ մտերիմներին։","Մարդիկ բաժանվում են ուժեղների և թույլերի։","Ցանկացած տհաճ իրավիճակում կան մեղավորներ։","Ինչ-որ մեկից կախված լինելը թուլության դրսևորում է։","Եթե ես ցույց տամ իմ թույլ կողմերը, ապա մարդիկ կսկսեն օգտվել դրանցից։","Ես կարող եմ ստանալ այն ամենը, ինչ ուզում եմ։ Հաճախ պետք է ճնշում գործադրել՝ արդյունք ստանալու համար։","Դժվարությունների հաղթահարումը կոփում է ինձ և դարձնում ուժեղ։"]},
+{n:9,name:"Խաղաղարար",alt:"Միջնորդ",tag:"Հանգիստ, ընդունող, ներդաշնակ",color:"var(--c9)",dk:false,center:"body",
+ about:"Իններորդները հանգիստ, բարեհամբույր և ընդունող մարդիկ են. նրանց շուրջը մշտապես հաճելի ներդաշնակ մթնոլորտ է տիրում։ Նրանք հիանալի լսողներ ու միջնորդներ են, տեսնում են տարբեր տեսակետներ և ձգտում են, որ բոլորը իրենց լավ զգան։",
+ attitude:"Իններորդները Էննեագրամի ամենախաղաղ ներկայացուցիչներն են։ Նրանք չեն սիրում վեճեր ու կոնֆլիկտներ, ուստի շրջապատում աշխատում են ստեղծել խաղաղ ու ներդաշնակ միջավայր։",
+ strengths:["Կարեկցանք և խաղաղարարություն","Համբերատարություն","Տարբեր տեսակետներ տեսնելու ունակություն","Հանգստացնող, հուսալի ներկայություն"],
+ challenges:["Սեփական կարծիքն ու ցանկությունները մոռանալը","Դանդաղկոտություն կարևոր որոշումներ կայացնելիս","Կոնֆլիկտից խուսափելը ամեն գնով"],
+ advice:"Ձեր կարծիքը կարևոր է։ Փորձեք ամեն օր մեկ փոքր որոշում կայացնել հենց ձեր ցանկության հիման վրա։",
+ motivation:"Ծուլություն",fixation:"Անգործություն",need:"Հարգանք (սահմաններ)",strategy:"Շրջապատել ինքն իրեն ներդաշնակությամբ և դրականով և պահպանել խաղաղություն",
+ growth:3,stress:6,
+ beliefs:["Չի կարելի ունենալ սեփական ցանկություններ և չափազանց ակտիվորեն հայտարարել ինքդ քո մասին։","Ագրեսիան միշտ տհաճ է ու կործանարար։","Ես պետք է մեղմ ու հաճելի լինեմ մարդկանց հետ հաղորդակցվելիս։","Ես կարևոր չեմ։","Եթե ես սկսեմ բարձրաձայնել իմ կարծիքը, ապա դա կարող է բախումների ու դիսկոմֆորտ առաջացնել։","Իրադարձությունները պարզապես տեղի են ունենում ինձ հետ։","Հաճախ նախընտրում եմ հանգստանալ և չներգրավվել տեղի ունեցողի մեջ։","Խնդիրների մեծ մասը լուծվում է ինքնին։","Եթե չափից ավելի ներգրավվենք կյանքի մեջ, ապա դժբախտություններն էլ կանցնեն մեր կողքով։"]}
+];
+/* Թևերի ստանդարտ նկարագրություններ՝ [ցածր հարևան, բարձր հարևան] */
+const WSTD = {
+ 1:["9-րդ թևով Առաջինն ավելի հանգիստ, զուսպ և դիվանագիտական է. նրա խստությունը մեղմանում է, բայց երբեմն ավելի հեռու է մնում ու ավելի շատ է հետ քաշվում։","2-րդ թևով Առաջինն ավելի ջերմ, մարդամոտ և օգնելու պատրաստ է, սակայն կարող է ավելի ակտիվ միջամտել ու ուրիշներին «ուղղել»։"],
+ 2:["1-ին թևով Երկրորդն ավելի սկզբունքային, կազմակերպված և ինքնաքննադատ է. նրա օգնությունն ավելի կառուցվածքային է ու պատասխանատու։","3-րդ թևով Երկրորդն ավելի հասարակական, նպատակասլաց ու հավակնոտ է, ավելի շատ է մտածում իր կերպարի ու հաջողության մասին։"],
+ 3:["2-րդ թևով Երրորդն ավելի ջերմ է և հարաբերություններին կենտրոնացած. նա հաճախ ցանկանում է հավանվել ու օգտակար լինել մարդկանց։","4-րդ թևով Երրորդն ավելի ինքնադիտող և ստեղծագործ է, գնահատում է խորությունն ու իսկությունը, ավելի քիչ է հակված ցուցադրականության։"],
+ 4:["3-րդ թևով Չորրորդն ավելի հասարակական, արտահայտիչ և նպատակասլաց է. նրա ստեղծագործականությունը ավելի հեշտ է դուրս գալիս մարդկանց մոտ։","5-րդ թևով Չորրորդն ավելի մտածող, ինքնաբավ և մեկուսի է. նա խորանում է գաղափարների ու իմաստների մեջ, ավելի քիչ է դրսևորվում դրսից։"],
+ 5:["4-րդ թևով Հինգերորդն ավելի զգայուն, ստեղծագործ և արտահայտիչ է, ավելի հեշտ է կապվում սեփական զգացմունքների հետ։","6-րդ թևով Հինգերորդն ավելի գործնական, թիմային և զգոն է, ավելի հեշտությամբ է ընդունում հավատարմության ու պատասխանատվության դերը։"],
+ 6:["5-րդ թևով Վեցերորդն ավելի վերլուծական, ինքնուրույն և զուսպ է, ավելի է հակված խորանալու ու նախապես ստուգելու։","7-րդ թևով Վեցերորդն ավելի ընկերասեր, խոսուն և լավատես է, ավելի հեշտ է դուրս գալիս անհանգստությունից ուրախության միջոցով։"],
+ 7:["6-րդ թևով Յոթերորդն ավելի պատասխանատու, հավատարիմ և հարաբերություններին կենտրոնացած է, ավելի զգույշ է ռիսկերի նկատմամբ։","8-րդ թևով Յոթերորդն ավելի վճռական, ուժեղ և ուղղամիտ է. նա ավելի հեշտությամբ իրականացնում է իր ծրագրերն ու ձգտում է ազդեցության։"],
+ 8:["7-րդ թևով Ութերորդն ավելի էներգետիկ, մարդամոտ և ձեռներեց է, ավելի շատ է սիրում ուրախությունն ու նոր հնարավորությունները։","9-րդ թևով Ութերորդն ավելի հանգիստ, համբերատար և զուսպ է. նրա ուժը դրսևորվում է ավելի մեղմ ու կայուն կերպով։"],
+ 9:["8-րդ թևով Իններորդն ավելի վճռական, էներգետիկ և ուղղամիտ է, ավելի հեշտ է պաշտպանում իր կարծիքը։","1-ին թևով Իններորդն ավելի կազմակերպված, սկզբունքային և ինքնաքննադատ է, ավելի շատ է ձգտում ճիշտ ու կարգավորված կյանքի։"]
+};
+const ICON = {1:"🧭",2:"🤝",3:"🏆",4:"🎨",5:"🔭",6:"🛡️",7:"🎈",8:"🦁",9:"🕊️"};
+const CENTERS = [
+ {k:"head",title:"Գլխի կենտրոն",sub:"Մտավոր ինտելեկտ",icon:"💡",color:"var(--c5)",types:[5,6,7],emo:"Վախ",text:"Այս տիպերը աշխարհին մոտենում են մտածողությամբ, վերլուծությամբ ու պլանավորմամբ. նրանց համար կարևոր է հասկանալ, կանխատեսել և զգալ իրենց ապահով։"},
+ {k:"heart",title:"Սրտի կենտրոն",sub:"Էմոցիոնալ ինտելեկտ",icon:"💗",color:"var(--c2)",types:[2,3,4],emo:"Ամոթ",text:"Այս տիպերը կողմնորոշվում են հարաբերությունների, զգացմունքների և կերպարի միջոցով. նրանց համար կարևոր է լինել տեսանելի, արժևորված ու սիրված։"},
+ {k:"body",title:"Մարմնի կենտրոն",sub:"Բնազդային ինտելեկտ",icon:"🔥",color:"var(--c8)",types:[8,9,1],emo:"Զայրույթ",text:"Այս տիպերը գործում են բնազդով ու ներքին զգացողությամբ. նրանց համար կարևոր են սահմանները, վերահսկողությունը և իրենց կյանքի ու տարածքի նկատմամբ վերահսկողությունը։"}
+];
+const t = n => TYPES[n-1];
+const centerName = k => CENTERS.find(c=>c.k===k).title;
+
+/* ---------- SVG enneagram ---------- */
+function pt(n,R,cx=200,cy=200){const a=((n%9)*40)*Math.PI/180;return [cx+R*Math.sin(a),cy-R*Math.cos(a)]}
+function buildFig(svg,{interactive=true,arrows=false}={}){
+  const R=140; let s=`<circle class="ring" cx="200" cy="200" r="${R}"/>`;
+  if(arrows){
+    s+=`<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8b5cc9"/></marker></defs>`;
+  }
+  const poly=(ids,cls)=>{const p=ids.map(i=>pt(i,R).join(",")).join(" ");return `<polygon class="ln ${cls||""}" points="${p}"/>`};
+  s+=poly([3,6,9],"tri")+poly([1,4,2,8,5,7],"");
+  if(arrows){
+    const seq=[1,4,2,8,5,7,1,5]; // stress order of hexad; triad 3-9-6-3
+    [[1,4],[4,2],[2,8],[8,5],[5,7],[7,1],[3,9],[9,6],[6,3]].forEach(([a,b])=>{
+      const [x1,y1]=pt(a,R),[x2,y2]=pt(b,R);
+      const dx=x2-x1,dy=y2-y1,L=Math.hypot(dx,dy),sh=26/L;
+      s+=`<line x1="${x1+dx*sh}" y1="${y1+dy*sh}" x2="${x2-dx*sh}" y2="${y2-dy*sh}" stroke="#8b5cc9" stroke-width="2.4" marker-end="url(#ah)" opacity=".85"/>`;
+    });
+  }
+  for(let n=1;n<=9;n++){
+    const [x,y]=pt(n,R),T=t(n);
+    const sn=Math.sin((n%9)*40*Math.PI/180), cs=Math.cos((n%9)*40*Math.PI/180);
+    const lx=x+sn*34+(Math.abs(sn)>.3?Math.sign(sn)*0:0), ly=y-cs*30;
+    const anc=sn<-.3?"end":sn>.3?"start":"middle";
+    s+=`<g class="node ${T.dk?'dk':''}" ${interactive?`tabindex="0" role="button" aria-label="${n}-րդ տիպ՝ ${T.name}" data-n="${n}"`:''} >
+      <circle cx="${x}" cy="${y}" r="22" fill="${T.color}"/>
+      <text x="${x}" y="${y+8}" text-anchor="middle">${n}</text></g>`;
+    if(interactive) s+=`<text x="${lx}" y="${ly+4}" text-anchor="${anc}" font-size="13" font-weight="700" fill="currentColor" opacity=".75" style="pointer-events:none">${T.name}</text>`;
+  }
+  svg.innerHTML=s;
+  svg.style.color="var(--ink)";
+  if(interactive) svg.querySelectorAll(".node").forEach(g=>{
+    g.addEventListener("click",()=>openType(+g.dataset.n));
+    g.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openType(+g.dataset.n)}});
+  });
+}
+buildFig(document.getElementById("heroFig"));
+buildFig(document.getElementById("arrowFig"),{interactive:false,arrows:true});
+
+/* ---------- Centers ---------- */
+document.getElementById("centers").innerHTML=CENTERS.map(c=>`
+ <div class="card center reveal" style="--cc:${c.color}">
+  <div class="ico">${c.icon}</div><h3>${c.title}</h3>
+  <p><b>${c.sub}</b> · հիմնական էմոցիա՝ ${c.emo}</p>
+  <p>${c.text}</p>
+  <div class="pills">${c.types.map(n=>`<button class="pill ${t(n).dk?'dk':''}" style="--pc:${t(n).color}" data-open="${n}">${n} · ${t(n).name}</button>`).join("")}</div>
+ </div>`).join("");
+
+/* ---------- Types grid ---------- */
+document.getElementById("tgrid").innerHTML=TYPES.map(T=>`
+ <button class="tcard ${T.dk?'dk':''} reveal" style="--c:${T.color}" data-open="${T.n}">
+  <span class="num">${T.n}</span>
+  <h3>${ICON[T.n]} ${T.name}</h3>
+  <p class="tag">${T.tag}</p>
+  <span class="more">Կարդալ ավելին →</span>
+ </button>`).join("");
+
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-open]"); if(b) openType(+b.dataset.open);
+});
+
+/* ---------- Modal ---------- */
+const dlg=document.getElementById("dlg");
+function profileHTML(n){
+  const T=t(n), g=t(T.growth), s=t(T.stress);
+  const w1=t(n===1?9:n-1), w2=t(n===9?1:n+1);
+  const D=(window.DETAILS||{})[n], X=((window.EXTRA||{}).perType||{})[n]||[];
+  const secHTML=(s,open)=>`<details class="sec" ${open?"open":""}><summary>${s.h}</summary><div class="sbody">${(s.p||[]).map(x=>`<p>${x}</p>`).join("")}${(s.ul&&s.ul.length)?`<ul>${s.ul.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}</div></details>`;
+  const ws=(D&&D.wings&&D.wings.length)?D.wings:[{n:w1.n,name:w1.name,text:WSTD[n][0]},{n:w2.n,name:w2.name,text:WSTD[n][1]}];
+  const wingCards=`<h4>Թևերը մանրամասն</h4><div class="two">${ws.map(w=>`<div class="wingc" style="--wc:${t(w.n).color}"><b>${w.n}-րդ թև · ${w.name||t(w.n).name}</b><p>${w.text}</p></div>`).join("")}</div>${(D&&D.wings&&D.wings.length)?"":`<p class="wnote">Թևերի այս նկարագրությունները Էննեագրամի ընդհանուր տեսությունից են, և դասընթացի աշխատանքային տետրում տիպերի գլուխներում առանձին չեն բերված։ Թևի ազդեցությունը լինում է թեթև, ուստի յուրաքանչյուրի մոտ այն արտահայտվում է տարբեր չափով։</p>`}`;
+  const secs=[...(D?D.sections:[]),...X];
+  const detailBlock=secs.length?`<h4 style="margin-top:28px">📖 Տիպի մանրամասն նկարագիրը</h4><div class="secs">${secs.map((s,i)=>secHTML(s,i===0)).join("")}</div>`:"";
+  return `
+  <div class="m-head ${T.dk?'dk':''}" style="--c:${T.color}">
+    <div class="big">${n}</div>
+    <div><h3 id="dTitle">${ICON[n]} ${T.name}</h3><p>${T.alt} · ${T.tag}</p></div>
+    <button class="m-close" aria-label="Փակել" onclick="document.getElementById('dlg').close()">✕</button>
+  </div>
+  <div class="m-body" style="--c:${T.color}">
+    <p style="margin-top:16px">${T.about}</p>
+    <h4>Վերաբերմունքը կյանքի հանդեպ</h4><p style="margin:0">${T.attitude}</p>
+    <h4>Հիմնական բնութագրիչներ</h4>
+    <div class="facts">
+      <div class="fact"><small>Կենտրոն</small><span>${centerName(T.center)}</span></div>
+      <div class="fact"><small>Մոտիվացիա</small><span>${T.motivation}</span></div>
+      <div class="fact"><small>Ֆիքսացիա</small><span>${T.fixation}</span></div>
+      <div class="fact"><small>Բազային պահանջմունք</small><span>${T.need}</span></div>
+    </div>
+    <p style="margin:12px 0 0"><b>Կենսական ռազմավարություն.</b> ${T.strategy}։</p>
+    <div class="two">
+      <div><h4 class="good">💪 Ուժեղ կողմեր</h4><ul>${T.strengths.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+      <div><h4 class="grow">🌱 Աճի հնարավորություններ</h4><ul>${T.challenges.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    </div>
+    <h4>Թևեր և շարժման ուղղություններ</h4>
+    <ul>
+      <li><b>Թևեր՝</b> ${w1.n} (${w1.name}) և ${w2.n} (${w2.name})</li>
+      <li><b>Աճի ուղղություն՝</b> ${g.n} (${g.name}). ապահով և հանգիստ վիճակում</li>
+      <li><b>Սթրեսի ուղղություն՝</b> ${s.n} (${s.name}). երկարատև լարվածության պայմաններում</li>
+    </ul>
+    ${wingCards}
+    <div class="tip" style="margin-top:20px">💡 <b>Խորհուրդ.</b> ${T.advice}</div>
+    ${detailBlock}
+  </div>`;
+}
+function openType(n){
+  document.getElementById("dContent").innerHTML=profileHTML(n);
+  if(!dlg.open) dlg.showModal();
+  dlg.querySelector(".m-body").scrollTop=0;
+}
+dlg.addEventListener("click",e=>{ if(e.target===dlg) dlg.close(); });
+
+/* ---------- TEST ---------- */
+const answers=TYPES.map(()=>new Set());
+let step=0;
+const $=id=>document.getElementById(id);
+$("startBtn").onclick=()=>{ $("intro").hidden=true; $("quiz").hidden=false; step=0; render(); $("panel").scrollIntoView({behavior:"smooth",block:"start"}); };
+function render(){
+  const T=TYPES[step];
+  $("stepLabel").textContent=`Խումբ ${step+1} / 9`;
+  $("selCount").textContent=`Նշված է՝ ${answers[step].size} / ${T.beliefs.length}`;
+  $("pbar").style.width=((step)/9*100)+"%";
+  $("opts").innerHTML=T.beliefs.map((b,i)=>`
+    <label class="opt"><input type="checkbox" data-i="${i}" ${answers[step].has(i)?"checked":""}>
+    <span class="box">✓</span><span>${b}</span></label>`).join("");
+  $("opts").querySelectorAll("input").forEach(inp=>inp.onchange=()=>{
+    inp.checked?answers[step].add(+inp.dataset.i):answers[step].delete(+inp.dataset.i);
+    $("selCount").textContent=`Նշված է՝ ${answers[step].size} / ${T.beliefs.length}`;
+  });
+  $("prevBtn").style.visibility=step===0?"hidden":"visible";
+  $("nextBtn").textContent=step===8?"Տեսնել արդյունքը ✨":"Հաջորդ →";
+}
+$("prevBtn").onclick=()=>{ if(step>0){step--;render();$("panel").scrollIntoView({behavior:"smooth",block:"start"});} };
+$("nextBtn").onclick=()=>{
+  if(step<8){step++;render();$("panel").scrollIntoView({behavior:"smooth",block:"start"});}
+  else showResult();
+};
+function showResult(){
+  $("quiz").hidden=true; $("result").hidden=false;
+  const scores=TYPES.map((T,i)=>({n:T.n,pct:Math.round(answers[i].size/T.beliefs.length*100),cnt:answers[i].size,tot:T.beliefs.length}));
+  const total=scores.reduce((a,s)=>a+s.cnt,0);
+  const sorted=[...scores].sort((a,b)=>b.pct-a.pct||b.cnt-a.cnt||a.n-b.n);
+  const el=$("result");
+  if(total===0){
+    el.innerHTML=`<div style="text-align:center"><div style="font-size:3rem">🤔</div><h3>Դեռ ոչինչ չես նշել</h3><p class="hint">Արդյունք ստանալու համար նշիր գոնե մի քանի պնդում, որոնք համընկնում են քեզ հետ։</p><button class="btn primary" id="again0">Վերադառնալ թեստին</button></div>`;
+    $("again0").onclick=()=>{el.hidden=true;$("quiz").hidden=false;step=0;render();};
+    return;
+  }
+  const top=sorted[0];
+  const tied=sorted.filter(s=>s.pct===top.pct);
+  const T=t(top.n);
+  const second=sorted.find(s=>s.n!==top.n && !tied.some(x=>x.n===s.n));
+  let extra="";
+  if(tied.length>1){
+    extra=`<p class="note">Արդյունքը համընկնում է մի քանի տիպի հետ՝ <b>${tied.map(s=>`${s.n}-րդ (${t(s.n).name})`).join(", ")}</b>։ Դա սովորական է. կարդա նրանց նկարագրությունները և ընտրիր այն, որն ավելի շատ է արձագանքում ներսում։</p>`;
+  } else if(second && second.pct>=top.pct-15 && second.pct>0){
+    const adj=Math.min(Math.abs(second.n-top.n),9-Math.abs(second.n-top.n))===1;
+    extra=`<p class="note">Քո մոտ նկատելի է նաև <b>${second.n}-րդ տիպը (${t(second.n).name})</b>՝ ${second.pct}% համընկնում։ ${adj?"Այն քո հարևան տիպն է, հնարավոր է՝ այն քո <b>թևն</b> է։":"Արժե կարդալ նաև դրա նկարագրությունը։"}</p>`;
+  }
+  const order=[...scores].sort((a,b)=>b.pct-a.pct||a.n-b.n);
+  el.innerHTML=`
+  <div class="result-hero ${T.dk?'dk':''}" style="--c:${T.color}">
+    <div class="conf" id="conf"></div>
+    <p style="margin:0 0 12px;font-weight:700;color:var(--muted)">🎉 Շնորհավորում ենք։ Քո առավել համընկնող տիպը՝</p>
+    <div class="big">${T.n}</div>
+    <h3>${ICON[T.n]} ${T.name}</h3>
+    <p style="margin:0;color:var(--muted)">${T.alt} · ${T.tag}</p>
+    <p style="max-width:620px;margin:16px auto 0">${T.about}</p>
+    <div class="facts" style="max-width:520px;margin:18px auto 0;text-align:left;--c:${T.color}">
+      <div class="fact"><small>Կենտրոն</small><span>${centerName(T.center)}</span></div>
+      <div class="fact"><small>Մոտիվացիա</small><span>${T.motivation}</span></div>
+    </div>
+    <div style="margin-top:22px"><button class="btn primary" id="moreBtn">📖 Կարդալ ավելին այս տիպի մասին</button></div>
+  </div>
+  ${extra?`<div style="margin-top:18px">${extra}</div>`:""}
+  <h3 style="margin-top:28px">Քո արդյունքը բոլոր տիպերի համար</h3>
+  <div class="bars">${order.map(s=>`
+    <div class="bar" style="--c:${t(s.n).color}"><span><b>${s.n}</b> · ${t(s.n).name}</span><div class="tr"><i data-w="${s.pct}"></i></div><b>${s.pct}%</b></div>`).join("")}</div>
+  <p class="note">Տոկոսը ցույց է տալիս, թե տվյալ տիպի պնդումների որ մասն ես նշել։ Դա ուղեցույց է, ոչ թե վերջնական «դատավճիռ». լավագույն ստուգումը նկարագրությունը կարդալն է և ինքդ քեզ դիտարկելը։</p>
+  <div class="nav-row" style="justify-content:center"><button class="btn ghost" id="redo">↻ Նորից անցնել</button><a class="btn ghost" href="#types">Տեսնել բոլոր տիպերը</a></div>`;
+  $("moreBtn").onclick=()=>openType(T.n);
+  $("redo").onclick=()=>{answers.forEach(s=>s.clear());el.hidden=true;$("quiz").hidden=false;step=0;render();$("panel").scrollIntoView({behavior:"smooth"});};
+  requestAnimationFrame(()=>setTimeout(()=>el.querySelectorAll(".tr i").forEach(i=>i.style.width=i.dataset.w+"%"),60));
+  // confetti
+  const cf=$("conf"), cols=["#e8794a","#8b5cc9","#14a39a","#f59e0b","#ec6f93","#4a7fd0"];
+  if(!matchMedia("(prefers-reduced-motion:reduce)").matches)
+    for(let i=0;i<48;i++){const p=document.createElement("i");p.style.left=Math.random()*100+"%";p.style.background=cols[i%cols.length];p.style.animationDuration=(2+Math.random()*2.2)+"s";p.style.animationDelay=(Math.random()*.6)+"s";cf.appendChild(p);}
+  $("panel").scrollIntoView({behavior:"smooth",block:"start"});
+}
+
+/* ---------- general extra sections ---------- */
+(function(){
+  const g=(window.EXTRA&&window.EXTRA.general)||[];
+  if(!g.length) return;
+  document.getElementById("more").style.display="";
+  document.getElementById("moreSecs").innerHTML=g.map((s,i)=>`<details class="sec"><summary>${s.h}</summary><div class="sbody">${(s.p||[]).map(x=>`<p>${x}</p>`).join("")}${(s.ul&&s.ul.length)?`<ul>${s.ul.map(x=>`<li>${x}</li>`).join("")}</ul>`:""}</div></details>`).join("");
+})();
+
+/* ---------- reveal on scroll ---------- */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
